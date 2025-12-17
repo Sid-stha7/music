@@ -1,3 +1,10 @@
+
+// TODO: (Loads from .env file)/ MAKE IT DYNAMIC IN FUTURE NOT HARD CODE
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID ||"4f4bca1bcc654ac2a729d2a96d636df6"; ;
+const redirectUri = process.env.REACT_APP_REDIRECT_URI || "https://dxg5zxdx-3000.use.devtunnels.ms";
+
+
+
 export function generateRandomString(length) {
     let text = '';
     const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -19,34 +26,31 @@ export async function generateCodeChallenge(codeVerifier) {
         .replace(/=+$/, '');
 }
 
-
-export async function redirectToAuthCodeFlow(clientId) {
+export async function redirectToAuthCodeFlow() {
     const verifier = generateRandomString(128);
     const challenge = await generateCodeChallenge(verifier);
 
-    // IMPORTANT: We save the verifier to use it when the user comes back!
     localStorage.setItem("verifier", verifier);
 
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("response_type", "code");
-    params.append("redirect_uri", "https://dxg5zxdx-3000.use.devtunnels.ms/"); // Must match dashboard exactly
-    params.append("scope", "user-read-private user-read-email user-top-read user-read-playback-state user-modify-playback-state");
+    params.append("redirect_uri", redirectUri);
+    params.append("scope", "user-read-private user-read-email playlist-read-private user-read-currently-playing user-top-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
-
-export async function getAccessToken(clientId, code) {
+export async function getAccessToken(code) {
     const verifier = localStorage.getItem("verifier");
 
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
     params.append("code", code);
-    params.append("redirect_uri", "https://dxg5zxdx-3000.use.devtunnels.ms");
+    params.append("redirect_uri", redirectUri); // Now uses the EXACT same URI as above
     params.append("code_verifier", verifier);
 
     const result = await fetch("https://accounts.spotify.com/api/token", {
@@ -56,7 +60,7 @@ export async function getAccessToken(clientId, code) {
     });
 
     const { access_token } = await result.json();
+    console.log(access_token);
+    
     return access_token;
 }
-
-
