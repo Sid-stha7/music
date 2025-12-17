@@ -20,7 +20,7 @@ import {getAccessToken, redirectToAuthCodeFlow} from "./config/spotifyAuth";
 
 
 // TODO: Replace with your actual Client ID from the Spotify Dashboard
-const clientId = "YOUR_ACTUAL_CLIENT_ID_HERE";
+const clientId = "4f4bca1bcc654ac2a729d2a96d636df6";
 
 function App() {
     const [token, setToken] = useState(null);
@@ -29,8 +29,10 @@ function App() {
         // Check if there is a code in the URL (user just logged in)
         const params = new URLSearchParams(window.location.search);
         const code = params.get("code");
+        
 
         if (code && !token) {
+            console.log(code);
             // If we have a code, trade it for a token
             getAccessToken(clientId, code).then(accessToken => {
                 setToken(accessToken);
