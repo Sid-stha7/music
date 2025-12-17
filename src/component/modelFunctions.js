@@ -1,0 +1,1 @@
+//create a model functions to fetc data from backend: createUser , getUser , savePlaylist , getPlaylists , getPlaylist and deletePlaylist
