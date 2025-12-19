@@ -2,6 +2,7 @@
 
 
 
+
 //fetch playlist
 export async function fetchPlaylists(token) {
     const result = await fetch("https://api.spotify.com/v1/me/playlists", {
@@ -11,6 +12,15 @@ export async function fetchPlaylists(token) {
     return await result.json();
 }
 
+//fetch tracks
+
+export async function fetchTracks(token, playlistId) {
+    const result = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: "GET", 
+        headers: { Authorization: `Bearer ${token}` }
+    });
+    return await result.json();
+}
 
 // Fetch the User's Profile
 export async function fetchProfile(token) {

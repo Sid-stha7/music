@@ -1,7 +1,7 @@
 
 // TODO: (Loads from .env file)/ MAKE IT DYNAMIC IN FUTURE NOT HARD CODE
-const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID ||"4f4bca1bcc654ac2a729d2a96d636df6"; ;
-const redirectUri = process.env.REACT_APP_REDIRECT_URI || "https://dxg5zxdx-3000.use.devtunnels.ms";
+const clientId = process.env.REACT_APP_SPOTIFY_CLIENT_ID
+const redirectUri = process.env.REACT_APP_REDIRECT_URI 
 
 
 
