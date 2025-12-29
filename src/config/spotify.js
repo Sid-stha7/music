@@ -29,13 +29,19 @@ export async function fetchProfile(token) {
 //medium term is = 6 month
 
 // Fetch the User's Top Artists
-export async function fetchTopArtists(token, time_range = "medium_term") {
+export async function fetchTopArtists(token, time_range="short_term") {
     
-    const result = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10`, {
+    const result = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${time_range}`, {
         method: "GET", 
         headers: { Authorization: `Bearer ${token}` }
     });
-    console.log(result);
+    if (!result.ok) {
+        const errorMsg = await result.text();
+        console.error("Error fetching Top Artists:", result.status, errorMsg);
+        return { items: [] }; 
+    }
+    console.log(result.json);
+    
     
     return await result.json();
 }

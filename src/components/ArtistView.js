@@ -3,22 +3,8 @@ import React from 'react';
 function ArtistView({ nowPlaying, topArtists, changeArtistRange }) {
     return (
         <div>
-            {/* Now Playing Widget */}
-            {nowPlaying && nowPlaying.item && (
-                <div style={{ backgroundColor: '#282828', padding: '20px', borderRadius: '10px', marginBottom: '40px', maxWidth: '400px' }}>
-                    <h2 style={{ marginTop: 0, fontSize: '16px', color: '#1DB954' }}>NOW PLAYING</h2>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        {nowPlaying.item.album?.images[0]?.url && (
-                            <img src={nowPlaying.item.album.images[0].url} alt="Album Art" style={{ width: '60px', height: '60px', borderRadius: '5px', marginRight: '15px' }} />
-                        )}
-                        <div>
-                            <h3 style={{ margin: '0 0 5px 0', fontSize: '16px' }}>{nowPlaying.item.name}</h3>
-                            <p style={{ margin: 0, color: '#b3b3b3', fontSize: '14px' }}>{nowPlaying.item.artists[0].name}</p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
+        
+            
             {/* Header with Buttons */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
                 <h2 style={{ margin: 0 }}>Your Top Artists</h2>
