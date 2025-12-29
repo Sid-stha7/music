@@ -1,6 +1,11 @@
 import React from 'react';
 
 function Sidebar({ playlists, selectPlaylist, renderHome }) {
+
+    const logout = () => {
+        window.localStorage.removeItem("token"); // Delete the token
+        window.location.reload(); // Refresh the page to force login
+    };
     return (
         <div style={{ width: '250px', backgroundColor: '#000', padding: '20px', flexShrink: 0 }}>
             <div onClick={renderHome} style={{ cursor: 'pointer', marginBottom: '30px', fontWeight: 'bold', fontSize: '24px' }}>🏠 Home</div>
@@ -16,6 +21,24 @@ function Sidebar({ playlists, selectPlaylist, renderHome }) {
                     </li>
                 )) : <p>Loading...</p>}
             </ul>
+
+
+            <div style={{ marginTop: 'auto', padding: '20px' }}>
+                <button 
+                    onClick={logout} 
+                    style={{
+                        backgroundColor: 'transparent',
+                        border: '1px solid #b3b3b3',
+                        color: 'white',
+                        padding: '8px 15px',
+                        borderRadius: '20px',
+                        cursor: 'pointer',
+                        width: '100%'
+                    }}
+                >
+                    Logout
+                </button>
+            </div>
         </div>
     );
 }

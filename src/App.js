@@ -9,6 +9,7 @@ import TrackList from './components/Tracklist';
 import NowPlaying from "./components/nowPlaying"
 
 import "./components/Player.css";
+import Login from './components/login';
 
 function App() {
     const [token, setToken] = useState(window.localStorage.getItem("token"));
@@ -118,8 +119,7 @@ function App() {
         setView('nowplaying');
     };
 
-    if (!token) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#1DB954' }}><button onClick={redirectToAuthCodeFlow}>Login</button></div>;
-
+    if (!token) return <Login/>
     return (
         // OUTER CONTAINER: Column layout to stack Middle Section on top of Player
         <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'sans-serif', backgroundColor: '#121212', color: 'white' }}>

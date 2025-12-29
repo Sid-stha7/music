@@ -34,6 +34,23 @@ function Player({ token , onExpand, syncTrack,setDeviceId}) {
             player.addListener('ready', ({ device_id }) => {
                 console.log('Ready with Device ID', device_id);
                 if (setDeviceId) setDeviceId(device_id);
+                //  AUTO-TRANSFER LOGIC 
+                // This tells Spotify to switch playback to this app immediately
+                const transferPlayback = async () => {
+                    await fetch('https://api.spotify.com/v1/me/player', {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            device_ids: [device_id],
+                            play: false, // true = start playing immediately, false = just switch device
+                        }),
+                    });
+                };
+
+                transferPlayback();
             });
 
             player.addListener('not_ready', ({ device_id }) => {
