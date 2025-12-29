@@ -1,0 +1,90 @@
+.sidebar {
+    height: 100vh;
+    width: 230px; /* Fixed width like Spotify */
+    background-color: black;
+    color: #b3b3b3;
+    padding: 0 10px; /* Add some breathing room */
+    display: flex;
+    flex-direction: column;
+    min-width: 230px;
+}
+
+/* 1. The Logo */
+.sidebar-logo {
+    height: 70px;
+    padding: 20px;
+    width: 70%;
+    margin-bottom: 10px;
+}
+
+/* 2. Menu Options (Home, Search, Library) */
+.sidebar-option {
+    display: flex;
+    align-items: center;
+    color: #b3b3b3;
+    height: 40px;
+    cursor: pointer;
+    transition: 200ms color ease-in;
+    padding-left: 10px;
+}
+
+.sidebar-option:hover {
+    color: white;
+}
+
+.sidebar-option-icon {
+    margin-right: 15px; /* Space between icon and text */
+    font-size: 20px;    /* Slightly larger icons */
+}
+
+.sidebar-option span {
+    font-size: 14px;
+    font-weight: 700;   /* Bold text matches Spotify */
+}
+
+/* 3. Divider Line */
+.sidebar hr {
+    border: 1px solid #282828;
+    width: 90%;
+    margin: 10px auto;
+}
+
+/* 4. Playlist Title Header */
+.sidebar-title {
+    margin-left: 10px;
+    padding: 5px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* 5. Scrollable Playlist Area */
+.sidebar-playlists {
+    flex: 1;           /* Takes up all remaining vertical space */
+    overflow-y: auto;  /* Allows scrolling */
+    margin-top: 10px;
+}
+
+/* Custom Scrollbar (Chrome/Safari) */
+.sidebar-playlists::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-playlists::-webkit-scrollbar-thumb {
+    background-color: #4f4f4f;
+    border-radius: 4px;
+}
+
+.sidebar-playlist-item {
+    margin: 10px 0 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 200ms color ease-in;
+    white-space: nowrap;      /* Prevent text wrapping */
+    overflow: hidden;         /* Hide overflow */
+    text-overflow: ellipsis;  /* Add "..." if name is too long */
+}
+
+.sidebar-playlist-item:hover {
+    color: white;
+}
