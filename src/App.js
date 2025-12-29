@@ -6,6 +6,8 @@ import Player from './components/Player';
 
 import Sidebar from './components/Sidebar'; 
 import TrackList from './components/Tracklist';
+import NowPlaying from "./components/nowPlaying"
+
 import "./components/Player.css";
 
 function App() {
@@ -16,8 +18,44 @@ function App() {
     const [playlists, setPlaylists] = useState(null);
     const [tracks, setTracks] = useState(null);
     const [selectedPlaylistName, setSelectedPlaylistName] = useState(null);
-
+    const [selectedPlaylistId, setSelectedPlaylistId] = useState(null);
+    const [view, setView] = useState('home');
+    const [globalCurrentTrack, setGlobalCurrentTrack] = useState(null);
+    const [deviceId, setDeviceId] = useState(null);
     const effectRan = useRef(false);
+
+    const playTrack = async (id) => {
+        try {
+       // Default body: Play just one song
+        let body = {
+            uris: [id] 
+        };
+        // If we are viewing a playlist, play the whole thing!
+        if (selectedPlaylistId) {
+            body = {
+                context_uri: `spotify:playlist:${selectedPlaylistId}`,
+                offset: {
+                    uri: id
+                }
+            };
+        }
+
+        if (!deviceId) {
+            console.error("No Device ID found! Is the player ready?");
+            return;
+        }
+           await fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+        } catch (error) {
+            console.error("Error playing track:", error);
+        }
+    };
 
     //  Handle Login
     useEffect(() => {
@@ -65,11 +103,19 @@ function App() {
         const tracksData = await fetchTracks(token, id);
         setTracks(tracksData.items);
         setSelectedPlaylistName(name);
+        setSelectedPlaylistId (id);
+        setView('playlist')
     };
 
     const renderHome = () => {
-        setTracks(null);
-        setSelectedPlaylistName(null);
+        // setTracks(null);
+        // setSelectedPlaylistName(null);
+        // selectedPlaylistId(null)
+        setView('home')
+    };
+
+    const renderNowPlaying = () => {
+        setView('nowplaying');
     };
 
     if (!token) return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#1DB954' }}><button onClick={redirectToAuthCodeFlow}>Login</button></div>;
@@ -90,7 +136,9 @@ function App() {
                 />
 
                 {/* Main Content Area */}
-                <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
+                <div style={{ flex: 1, padding: '20px', overflowY: 'auto', background: 'linear-gradient(to bottom, #2a2a2a, #121212)' }}>
+                    {view== "home"&&(
+                    <div style={{ flex: 1, padding: '20px', overflowY: 'auto', background: 'linear-gradient(to bottom, #2a2a2a, #121212)' }}>
                     
                     {/* Header */}
                     {profile && (
@@ -105,7 +153,9 @@ function App() {
                         <TrackList 
                             tracks={tracks}
                             selectedPlaylistName={selectedPlaylistName}
-                            renderHome={renderHome} />
+                            renderHome={renderHome}
+                            playTrack={playTrack} />
+                            
                     ) : (
                         /* Default View: Top Artists */
                         <div>
@@ -141,10 +191,33 @@ function App() {
                         </div>
                     )}
                 </div>
+                )}
+
+                {view === 'playlist' && (
+                        /* PLAYLIST VIEW */
+                        <TrackList 
+                            tracks={tracks}
+                            selectedPlaylistName={selectedPlaylistName}
+                            renderHome={renderHome}
+                            playTrack={playTrack}
+                        />
+                    )}
+
+                    {view === 'nowplaying' && (
+                        /* Use globalCurrentTrack instead of nowPlaying.item */
+                        <NowPlaying currentTrack={globalCurrentTrack} />
+                    )}
+                </div>
+                    
             </div>
 
             {/* PLAYER: Sits outside the middle flex container, pinned to bottom */}
-            {token && <Player token={token} />}
+            {token && <Player
+             token={token} 
+            onExpand={renderNowPlaying}
+            syncTrack={setGlobalCurrentTrack}
+            setDeviceId={setDeviceId}
+            />}
         </div>
     );
 }

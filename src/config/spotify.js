@@ -31,10 +31,11 @@ export async function fetchProfile(token) {
 // Fetch the User's Top Artists
 export async function fetchTopArtists(token, time_range = "medium_term") {
     
-    const result = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${time_range}&limit=10`, {
+    const result = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=10`, {
         method: "GET", 
         headers: { Authorization: `Bearer ${token}` }
     });
+    console.log(result);
     
     return await result.json();
 }
